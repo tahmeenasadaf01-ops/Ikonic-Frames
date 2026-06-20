@@ -1,0 +1,8 @@
+{
+  "name": "Ikonic Frames",
+  "description": "Premium AI-powered social media presence and content generator tool.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
