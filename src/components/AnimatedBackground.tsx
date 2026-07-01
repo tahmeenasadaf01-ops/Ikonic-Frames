@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Sparkles } from "lucide-react";
+import { Heart, MessageSquare, Share2 } from "lucide-react";
 
 interface StarParticle {
   x: number;
@@ -292,12 +292,24 @@ export default function AnimatedBackground() {
         className="w-full h-full block absolute inset-0 z-0 opacity-85"
       />
 
-      {/* Floating Sparkle vectors */}
-      <div className="absolute top-[15%] left-[6%] text-purple-400/20 animate-float-slow-1 pointer-events-none">
-        <Sparkles className="w-5 h-5" />
+      {/* Floating Interaction Icons (Heart, Comment, Share) */}
+      <div className="absolute top-[12%] left-[8%] text-pink-500 opacity-10 animate-float-slow-1 pointer-events-none">
+        <Heart className="w-8 h-8 fill-pink-500/20" />
       </div>
-      <div className="absolute bottom-[20%] right-[10%] text-pink-400/20 animate-float-slow-3 pointer-events-none">
-        <Sparkles className="w-6 h-6" />
+      <div className="absolute top-[18%] right-[12%] text-purple-500 opacity-[0.07] animate-float-slow-2 pointer-events-none">
+        <MessageSquare className="w-9 h-9" />
+      </div>
+      <div className="absolute top-[45%] right-[6%] text-pink-500 opacity-[0.08] animate-float-slow-3 pointer-events-none">
+        <Share2 className="w-8 h-8" />
+      </div>
+      <div className="absolute bottom-[35%] left-[5%] text-purple-500 opacity-[0.09] animate-float-slow-4 pointer-events-none">
+        <Heart className="w-10 h-10" />
+      </div>
+      <div className="absolute bottom-[15%] right-[15%] text-pink-500 opacity-[0.07] animate-float-slow-1 pointer-events-none">
+        <MessageSquare className="w-8 h-8 fill-pink-500/10" />
+      </div>
+      <div className="absolute top-[65%] left-[10%] text-purple-500 opacity-[0.08] animate-float-slow-2 pointer-events-none">
+        <Share2 className="w-9 h-9" />
       </div>
     </div>
   );

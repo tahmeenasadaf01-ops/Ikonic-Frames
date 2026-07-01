@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Check, Star, Sparkles, X, ShieldCheck, Zap, Copy, Mail } from "lucide-react";
+import { Check, X, ShieldCheck, Zap, Copy, Mail } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 interface SubscriptionSectionProps {
@@ -48,7 +48,7 @@ export default function SubscriptionSection({ onUnlockSuccess }: SubscriptionSec
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <span className="text-xs font-bold uppercase tracking-widest text-purple-600 font-mono bg-purple-100/60 px-4 py-1.5 rounded-full inline-block">
+          <span className="text-xs font-bold uppercase tracking-widest text-black font-mono bg-slate-250 px-4 py-1.5 rounded-full inline-block">
             Flexible Membership Plans
           </span>
           <h2 className="text-3xl md:text-5xl font-bold text-slate-900 tracking-tight mt-4">
@@ -76,17 +76,24 @@ export default function SubscriptionSection({ onUnlockSuccess }: SubscriptionSec
         {/* Pricing Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {/* Transparent Tier */}
-          <div className="bg-white/70 backdrop-blur-md rounded-3xl p-8 border border-slate-200/60 shadow-lg flex flex-col justify-between">
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            whileHover={{ y: -8, transition: { duration: 0.25 } }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="bg-white/70 backdrop-blur-md rounded-[32px] p-8 border border-slate-200/60 shadow-lg flex flex-col justify-between"
+          >
             <div>
               <span className="text-xs font-mono uppercase text-slate-400 font-bold tracking-wider block">Standard Access</span>
-              <h3 className="text-2xl font-bold text-slate-800 mt-2">Free Starter</h3>
-              <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+              <h3 className="text-2xl font-bold text-slate-800 mt-2 font-outfit">Free Starter</h3>
+              <p className="text-xs text-slate-500 mt-2 leading-relaxed font-sans font-light">
                 Experience advanced branding capability with standard campaign draft allocations.
               </p>
               
               <div className="my-6">
-                <span className="text-4xl font-extrabold text-slate-900">$0</span>
-                <span className="text-xs text-slate-400 font-medium ml-1">Forever free</span>
+                <span className="text-4xl font-extrabold text-slate-900 font-outfit">$0</span>
+                <span className="text-xs text-slate-400 font-medium ml-1 font-mono">Forever free</span>
               </div>
 
               <div className="border-t border-slate-100 pt-6 space-y-4">
@@ -111,33 +118,40 @@ export default function SubscriptionSection({ onUnlockSuccess }: SubscriptionSec
 
             <button
               disabled
-              className="w-full mt-8 py-3 bg-slate-100 text-slate-500 font-semibold text-xs rounded-xl cursor-default text-center"
+              className="w-full mt-8 py-3 bg-slate-100 text-slate-500 font-semibold text-xs rounded-xl cursor-default text-center font-mono"
             >
               Current Active Plan
             </button>
-          </div>
+          </motion.div>
 
           {/* Premium Plan Card */}
-          <div className="bg-white rounded-3xl p-8 border-2 border-purple-500 shadow-2xl relative flex flex-col justify-between overflow-hidden">
-            <div className="absolute top-0 right-0 bg-gradient-pink-purple text-white text-[10px] uppercase font-bold tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-md">
+          <motion.div 
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            whileHover={{ y: -8, transition: { duration: 0.25 } }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="bg-white rounded-[32px] p-8 border-2 border-purple-500 shadow-2xl relative flex flex-col justify-between overflow-hidden"
+          >
+            <div className="absolute top-0 right-0 bg-gradient-pink-purple text-white text-[10px] uppercase font-bold tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-md font-mono">
               POPULAR CHOICES
             </div>
 
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="text-xs font-mono uppercase text-purple-600 font-bold tracking-wider">Premium Access</span>
-                <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                <Zap className="w-3.5 h-3.5 text-amber-500 animate-pulse" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-800 mt-2">Unlimited Professional</h3>
-              <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+              <h3 className="text-2xl font-bold text-slate-800 mt-2 font-outfit">Unlimited Professional</h3>
+              <p className="text-xs text-slate-500 mt-2 leading-relaxed font-sans font-light">
                 The ultimate companion for developers, marketers, creators, and startups.
               </p>
 
               <div className="my-6">
-                <span className="text-4xl font-extrabold text-slate-900">
+                <span className="text-4xl font-extrabold text-slate-900 font-outfit">
                   ${billingCycle === "monthly" ? monthlyPrice : yearlyPrice}
                 </span>
-                <span className="text-xs text-slate-500 font-medium ml-1">
+                <span className="text-xs text-slate-500 font-medium ml-1 font-mono">
                   / mo {billingCycle === "yearly" && "billed annually"}
                 </span>
               </div>
@@ -153,13 +167,15 @@ export default function SubscriptionSection({ onUnlockSuccess }: SubscriptionSec
               </div>
             </div>
 
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => handleSubscribeClick("Unlimited Professional")}
-              className="w-full mt-8 py-3.5 bg-gradient-pink-purple text-white font-bold text-xs rounded-xl shadow-lg hover:scale-[1.02] hover:shadow-purple-500/25 active:scale-[0.98] transition-all cursor-pointer text-center"
+              className="w-full mt-8 py-3.5 bg-gradient-pink-purple text-white font-bold text-xs rounded-xl shadow-lg hover:shadow-purple-500/25 active:scale-[0.98] transition-all cursor-pointer text-center"
             >
               UPGRADE TO PREMIUM
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
         </div>
       </div>
 
@@ -242,7 +258,7 @@ export default function SubscriptionSection({ onUnlockSuccess }: SubscriptionSec
                     onClick={() => triggerRedirect(selectedPlan)}
                     className="w-full py-3.5 bg-gradient-pink-purple text-white font-bold text-xs rounded-xl shadow-lg hover:opacity-95 transition-all text-center flex items-center justify-center gap-2 cursor-pointer"
                   >
-                    <Sparkles className="w-4 h-4 animate-pulse" /> OPEN EMAIL CLIENT
+                    <Mail className="w-4 h-4 animate-pulse" /> OPEN EMAIL CLIENT
                   </button>
                   
                   <button

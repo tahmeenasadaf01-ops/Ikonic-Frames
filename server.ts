@@ -1,5 +1,6 @@
 import express from "express";
 import path from "path";
+import fs from "fs";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
@@ -10,6 +11,15 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.json());
+
+// Prevent SPA routing from serving index.html for non-existent asset files
+app.get("/assets/*", (req, res, next) => {
+  const filePath = path.join(process.cwd(), req.path);
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).send("Asset not found");
+  }
+  next();
+});
 
 // Lazy-initialize Gemini client to prevent crashes on startup if key is missing
 let aiClient: GoogleGenAI | null = null;

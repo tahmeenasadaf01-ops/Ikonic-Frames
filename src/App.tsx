@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { 
-  Sparkles, 
   Play, 
   ArrowRight, 
   CheckCircle2, 
@@ -23,6 +22,7 @@ import {
   Hash
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { Home, User, Zap, Target, Video } from "lucide-react";
 import AnimatedBackground from "./components/AnimatedBackground";
 import ContentWizard from "./components/ContentWizard";
 import FounderSection from "./components/FounderSection";
@@ -35,6 +35,18 @@ export default function App() {
   const [showDemoModal, setShowDemoModal] = useState<boolean>(false);
   const [showNotification, setShowNotification] = useState<string | null>(null);
   const [isHeroHovered, setIsHeroHovered] = useState(false);
+  const [wizardMousePos, setWizardMousePos] = useState({ x: 0.15, y: 0, isHovered: false });
+
+  const handleWizardMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5; // range -0.5 to 0.5
+    const y = (e.clientY - rect.top) / rect.height - 0.5; // range -0.5 to 0.5
+    setWizardMousePos({ x, y, isHovered: true });
+  };
+
+  const handleWizardMouseLeave = () => {
+    setWizardMousePos(prev => ({ ...prev, isHovered: false }));
+  };
 
   // Synchronize generation count and premium status with localStorage
   useEffect(() => {
@@ -84,6 +96,8 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-50/20 text-slate-900 relative selection:bg-purple-100 selection:text-purple-800">
       
+
+
       {/* Dynamic Toast Alerts */}
       <AnimatePresence>
         {showNotification && (
@@ -93,7 +107,7 @@ export default function App() {
             exit={{ opacity: 0, y: -20, scale: 0.9 }}
             className="fixed top-6 left-1/2 -translate-x-1/2 z-[99999] bg-slate-900 text-white px-6 py-3.5 rounded-full shadow-2xl flex items-center gap-3 border border-slate-800 font-mono text-xs max-w-md text-center"
           >
-            <Sparkles className="w-4.5 h-4.5 text-pink-400 animate-pulse shrink-0" />
+            <Info className="w-4.5 h-4.5 text-pink-400 animate-pulse shrink-0" />
             <span>{showNotification}</span>
             <button onClick={() => setShowNotification(null)} className="hover:text-pink-400 ml-2">
               <X className="w-3.5 h-3.5" />
@@ -105,13 +119,13 @@ export default function App() {
       {/* Global Luxury Glass Navigation Bar */}
       <header className="sticky top-0 left-0 right-0 z-50 glass-panel border-b border-white/50 backdrop-blur-md px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => scrollToSection("hero")}>
-            <div className="bg-gradient-pink-purple p-2 rounded-xl text-white shadow-md shadow-purple-500/10">
-              <Sparkles className="w-5 h-5 animate-pulse" />
-            </div>
-            <span className="font-extrabold text-lg tracking-tight text-slate-900 font-sans">
-              Ikonic Frames
-            </span>
+          <div className="cursor-pointer h-16 w-auto flex items-center justify-center group" onClick={() => scrollToSection("hero")}>
+            <img
+              src="/src/assets/images/ikonicframes.icon.jpeg"
+              alt="Ikonic Frames Logo"
+              className="h-full w-auto object-contain transition-transform duration-300 hover:scale-[1.02]"
+              referrerPolicy="no-referrer"
+            />
           </div>
 
           {/* Nav Items */}
@@ -125,8 +139,10 @@ export default function App() {
           {/* Right actions */}
           <div className="flex items-center gap-4">
             {isPremium ? (
-              <span className="text-[10px] uppercase tracking-wider font-mono bg-purple-100 text-purple-700 font-bold px-3.5 py-1.5 rounded-full border border-purple-200 shadow-sm flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-purple-600" /> Premium Professional Active
+              <span className="text-[10px] uppercase tracking-wider font-mono bg-purple-100 text-purple-700 font-bold px-2.5 py-1.5 rounded-full border border-purple-200 shadow-sm flex items-center gap-1 shrink-0">
+                <CheckCircle2 className="w-3.5 h-3.5 text-purple-600 shrink-0" />
+                <span className="hidden sm:inline">Premium Active</span>
+                <span className="sm:hidden">Premium</span>
               </span>
             ) : (
               <span className="text-[10px] uppercase tracking-wider font-mono bg-slate-100 text-slate-600 font-bold px-3.5 py-1.5 rounded-full border border-slate-200 shadow-sm hidden sm:inline-block">
@@ -145,8 +161,20 @@ export default function App() {
       </header>
 
       {/* SECTION 1 — HERO */}
-      <section id="hero" className="relative pt-16 pb-20 md:pt-20 md:pb-24 overflow-hidden bg-white bg-dot-pattern">
+      <section id="hero" className="relative pt-16 pb-20 md:pt-20 md:pb-24 overflow-hidden bg-white text-slate-900">
         
+        {/* Dreamy Meadow Sunset Background for the Landing Page */}
+        <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden">
+          <img 
+            src="/src/assets/images/meadow_sunset_bg_1782747015084.jpg" 
+            alt="Dreamy Meadow Sunset" 
+            className="w-full h-full object-cover opacity-100 brightness-100 transition-all duration-700"
+            referrerPolicy="no-referrer"
+          />
+          {/* Soft premium white/light light-bleed overlay to ensure maximum readability and vibrant color contrast of the background landscape */}
+          <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-white/35 to-white/50 backdrop-blur-[0.5px]" />
+        </div>
+
         {/* Animated fluid atmosphere layer */}
         <AnimatedBackground />
 
@@ -157,6 +185,34 @@ export default function App() {
         {/* Decorative Background Floater Cards Container (Fills background layer behind content) */}
         <div className="absolute inset-x-0 top-0 bottom-0 max-w-7xl mx-auto px-6 pointer-events-none z-0">
           <div className="relative w-full h-full">
+            {/* Floating Like Icon Bubble */}
+            <div className="absolute left-[3%] top-[8%] hidden sm:flex items-center gap-2 bg-white/75 backdrop-blur-md px-3 py-2 rounded-full border border-white/50 shadow-md animate-float-slow-1 select-none">
+              <span className="flex h-2 w-2 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+              </span>
+              <Heart className="w-4 h-4 text-rose-500 fill-rose-500 animate-pulse" />
+              <span className="text-[10px] font-bold text-slate-700 font-mono">+1.2k Likes</span>
+            </div>
+
+            {/* Floating Comment Icon Bubble */}
+            <div className="absolute right-[4%] top-[10%] hidden sm:flex items-center gap-2 bg-white/75 backdrop-blur-md px-3 py-2 rounded-full border border-white/50 shadow-md animate-float-slow-2 select-none">
+              <MessageSquare className="w-4 h-4 text-purple-500" />
+              <span className="text-[10px] font-bold text-slate-700 font-mono">84 Comments</span>
+            </div>
+
+            {/* Floating Save Icon Bubble */}
+            <div className="absolute left-[8%] bottom-[8%] hidden sm:flex items-center gap-2 bg-white/75 backdrop-blur-md px-3 py-2 rounded-full border border-white/50 shadow-md animate-float-slow-3 select-none">
+              <Bookmark className="w-4 h-4 text-indigo-550 fill-indigo-100" />
+              <span className="text-[10px] font-bold text-slate-700 font-mono">Saved!</span>
+            </div>
+
+            {/* Floating Share Icon Bubble */}
+            <div className="absolute right-[8%] bottom-[12%] hidden sm:flex items-center gap-2 bg-white/75 backdrop-blur-md px-3 py-2 rounded-full border border-white/50 shadow-md animate-float-slow-4 select-none">
+              <Share2 className="w-4 h-4 text-blue-500" />
+              <span className="text-[10px] font-bold text-slate-700 font-mono font-sans">Shared!</span>
+            </div>
+
             {/* Left Laptop Dashboard Floater Card */}
             <div className="hidden xl:flex absolute left-4 top-[22%] w-[255px] flex-col bg-white/60 backdrop-blur-md rounded-2xl border border-slate-200/40 shadow-[0_8px_24px_rgba(15,23,42,0.03)] p-5 space-y-4 text-left animate-float-slow-1 select-none opacity-65">
               <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
@@ -167,7 +223,7 @@ export default function App() {
                   </span>
                   <span className="text-[11px] font-bold text-slate-700 tracking-wide font-sans">AI OPTIMIZING FEED</span>
                 </div>
-                <Sparkles className="w-3.5 h-3.5 text-pink-500 animate-pulse" />
+                <Cpu className="w-3.5 h-3.5 text-pink-500 animate-pulse" />
               </div>
 
               <div className="space-y-3">
@@ -251,7 +307,7 @@ export default function App() {
           
           {/* Centered Main Header Column that expands on hover with visual feedback */}
           <div 
-            className="relative max-w-4xl mx-auto space-y-6 cursor-default group py-4 px-4 rounded-3xl transition-all duration-300"
+            className="relative w-full max-w-4xl mx-auto space-y-6 cursor-default group py-4 px-4 rounded-3xl transition-all duration-300"
             onMouseEnter={() => setIsHeroHovered(true)}
             onMouseLeave={() => setIsHeroHovered(false)}
           >
@@ -311,13 +367,24 @@ export default function App() {
               )}
             </AnimatePresence>
 
+            {/* Professional overline text to establish solid typography hierarchy */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/75 backdrop-blur-md border border-slate-200/50 shadow-sm text-slate-600 text-[10px] font-bold tracking-widest uppercase mb-1">
+              <img
+                src="/src/assets/images/ikonicframes.icon.jpeg"
+                alt="Ikonic Frames Icon"
+                className="w-5 h-5 shrink-0 object-contain rounded"
+                referrerPolicy="no-referrer"
+              />
+              <span>THE NEXT-GEN SOCIAL CAMPAIGN ENGINE</span>
+            </div>
+
             {/* Premium, ultra-stylish balanced Headline with zero boxes/overlays */}
-            <h1 className="text-5xl sm:text-7xl md:text-8xl xl:text-[94px] leading-[1.1] md:leading-[1.08] tracking-tight font-black text-black">
-              <span className="font-fraunces italic font-normal text-black mr-4 inline-block select-text transform group-hover:scale-105 transition-transform duration-300">Your</span>
-              <span className="font-outfit font-black text-gradient mr-4 select-text">Social Presence</span>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-[76px] leading-[1.15] md:leading-[1.1] tracking-tight font-black text-black text-center">
+              <span className="font-fraunces italic font-normal text-black mx-1.5 inline-block select-text transform group-hover:scale-105 transition-transform duration-300">Your</span>
+              <span className="font-outfit font-black text-gradient mx-1.5 select-text">Social Presence</span>
               <br className="hidden md:inline" />
               <span className="font-fraunces italic font-normal text-black tracking-tight mr-4 inline-block select-text transform group-hover:scale-105 transition-transform duration-300">Managed</span>
-              <span className="font-outfit font-black text-gradient select-text">Intelligently.</span>
+              <span className="font-outfit font-black text-gradient ml-4 select-text">Intelligently.</span>
             </h1>
 
             {/* Hero paragraph description - Centered */}
@@ -340,14 +407,16 @@ export default function App() {
             <p className="text-[10px] text-slate-400 font-mono tracking-widest uppercase hidden md:block pt-3 animate-pulse">
               ✨ Hover over the headline for organic social feedback sparks ✨
             </p>
-                   {/* Aesthetic showcase of beautiful horizontal visual preview graphics (Expanded to feel immersive and fill empty desktop space) */}
-          <div className="w-full max-w-7xl mt-16 relative px-4 transform hover:scale-[1.01] transition-transform duration-500 ease-out">
+          </div>
+
+          {/* Aesthetic showcase of beautiful horizontal visual preview graphics (Expanded to feel immersive and fill empty desktop space) */}
+          <div className="w-full max-w-7xl mt-10 sm:mt-16 relative px-2 sm:px-4 transform hover:scale-[1.01] transition-transform duration-500 ease-out">
             
             {/* Outer soft card device container with light dot styling */}
-            <div className="absolute inset-0 bg-slate-50/40 rounded-[56px] border border-slate-200/30 shadow-inner z-0 overflow-hidden bg-dot-pattern-slate" />
+            <div className="absolute inset-0 bg-slate-50/40 rounded-[32px] sm:rounded-[56px] border border-slate-200/30 shadow-inner z-0 overflow-hidden bg-dot-pattern-slate" />
 
             {/* Horizontal strip holding the gorgeous layout of content preview items side-by-side */}
-            <div className="relative w-full py-14 px-10 flex flex-col lg:flex-row justify-center items-stretch gap-10 z-10">
+            <div className="relative w-full py-10 sm:py-14 px-4 sm:px-10 flex flex-col lg:flex-row justify-center items-center lg:items-stretch gap-6 sm:gap-10 z-10">
               
               {/* Instagram Card Mockup - Made significantly larger and higher fidelity with scroll-triggered luxury animation */}
               <motion.div 
@@ -356,7 +425,7 @@ export default function App() {
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-                className="w-full lg:w-[360px] bg-white p-6 rounded-3xl shadow-2xl border border-slate-100/90 transform hover:-translate-y-3 hover:rotate-1 hover:shadow-pink-500/5 transition-all duration-500 shrink-0 flex flex-col justify-between"
+                className="w-full max-w-[360px] lg:w-[360px] bg-white p-6 rounded-3xl shadow-2xl border border-slate-100/90 transform hover:-translate-y-3 hover:rotate-1 hover:shadow-pink-500/5 transition-all duration-500 shrink-0 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center gap-3.5 mb-4">
@@ -377,7 +446,12 @@ export default function App() {
                         transition={{ repeat: Infinity, duration: 4 }}
                         className="w-12 h-12 rounded-full bg-white/85 shadow-lg flex items-center justify-center"
                       >
-                        <Sparkles className="w-6 h-6 text-pink-500 animate-pulse" />
+                        <img
+                          src="/src/assets/images/ikonicframes.icon.jpeg"
+                          alt="Ikonic Frames Logo"
+                          className="w-8 h-8 object-contain rounded"
+                          referrerPolicy="no-referrer"
+                        />
                       </motion.div>
                       <span className="text-[10px] font-mono tracking-widest text-slate-500 font-bold uppercase mt-1">GENERATIVE PREVIEW</span>
                     </div>
@@ -397,7 +471,7 @@ export default function App() {
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-                className="w-full lg:w-[410px] bg-white p-6 rounded-3xl shadow-2xl border border-slate-100/90 transform hover:-translate-y-3 hover:-rotate-1 hover:shadow-purple-500/5 transition-all duration-500 shrink-0 flex flex-col justify-between"
+                className="w-full max-w-[410px] lg:w-[410px] bg-white p-6 rounded-3xl shadow-2xl border border-slate-100/90 transform hover:-translate-y-3 hover:-rotate-1 hover:shadow-purple-500/5 transition-all duration-500 shrink-0 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center gap-3.5 mb-4">
@@ -432,7 +506,7 @@ export default function App() {
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.9, delay: 0.28, ease: [0.16, 1, 0.3, 1] }}
-                className="flex flex-col sm:flex-row lg:flex-col gap-4 justify-center items-stretch lg:max-w-[200px] shrink-0"
+                className="flex flex-col sm:flex-row lg:flex-col gap-4 justify-center items-stretch lg:max-w-[200px] shrink-0 w-full lg:w-auto"
               >
                 
                 <div className="bg-white py-4 px-5 rounded-2xl shadow-lg border border-slate-100/90 flex items-center gap-3 flex-1 lg:flex-none">
@@ -480,7 +554,7 @@ export default function App() {
         {/* Beautiful sliding Horizontal Marquee Ticker of apps Managed (NO BOX SHAPES — ONLY TEXT AND GLOWING ICONS MOVEMENT) */}
         <div className="w-full bg-black py-7 overflow-hidden border-y border-slate-900 relative z-20 mt-20 shadow-xl">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center px-6 justify-between gap-6">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-extrabold shrink-0 border-r border-slate-900 pr-6 select-none">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-extrabold shrink-0 border-r-0 md:border-r border-slate-900 pr-0 md:pr-6 mb-2 md:mb-0 select-none text-center md:text-left">
               PLATFORMS COMPREHENSIVELY INTEGRATED:
             </span>
             <div className="relative w-full overflow-hidden flex items-center py-2">
@@ -555,38 +629,123 @@ export default function App() {
               </div>
             </div>
           </div>
-        </div>      </div>
-
-      </section>
-
-      {/* SECTION 2 — TRY NOW FLOW */}
-      <section id="wizard-section" className="py-20 bg-slate-50/20 relative z-10 border-t border-slate-100/50 overflow-hidden">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs font-mono font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-3 py-1 rounded-full">
-              AI Strategy Room
-            </span>
-            <h2 className="text-2xl md:text-4xl font-bold text-slate-900 tracking-tight mt-3">
-              Draft Customized Campaigns Instantly.
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-500 mt-2 font-sans">
-              Enter target parameters, platform selection, and tone. Our engine drafts multi-platform content with layout visual frames, hashtags, and engagement hooks automatically.
-            </p>
-          </div>
-
-          <ContentWizard 
-            generationsCount={generationsCount} 
-            incrementGenerations={handleIncrementGenerations}
-            onUnlockPremium={() => {
-              triggerNotification("Redirecting: trial generation balance exhausted.");
-              scrollToSection("pricing");
-            }}
-          />
         </div>
       </section>
 
+      {/* Main website sections (except landing page) with premium grain gradient background and interactive graphics */}
+      <div className="relative overflow-hidden">
+        {/* Soft Pink-Yellow Grain Gradient Background Asset */}
+        <div className="absolute inset-0 z-0 pointer-events-none select-none">
+          <img 
+            src="/src/assets/images/pink_gradient_bg_1782830956599.jpg" 
+            alt="Soft Pink-Yellow Grain Gradient Background" 
+            className="w-full h-full object-cover opacity-100 transition-all duration-700"
+            referrerPolicy="no-referrer"
+          />
+          {/* Soft blend overlay */}
+          <div className="absolute inset-0 bg-white/5 backdrop-blur-[0.5px]" />
+        </div>
+
+        {/* Dynamic canvas-based mouse-interactive constellation/star graphic layer covering the entire container */}
+        <AnimatedBackground />
+
+        {/* SECTION 2 — TRY NOW FLOW */}
+        <section 
+          id="wizard-section" 
+          className="py-20 bg-transparent relative z-10 border-t border-slate-200/20 overflow-hidden"
+        >
+          <div className="max-w-6xl mx-auto px-6 relative z-10">
+            <div className="text-center max-w-2xl mx-auto mb-12 relative z-10">
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-black bg-slate-100 border border-slate-250 px-3.5 py-1 rounded-full">
+                AI Strategy Room
+              </span>
+              <h2 className="text-2xl md:text-4xl font-bold text-slate-900 tracking-tight mt-3">
+                Draft Customized Campaigns Instantly.
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-600 mt-2 font-sans">
+                Enter target parameters, platform selection, and tone. Our engine drafts multi-platform content with layout visual frames, hashtags, and engagement hooks automatically.
+              </p>
+            </div>
+
+            <ContentWizard 
+              isPremium={isPremium}
+              generationsCount={generationsCount} 
+              incrementGenerations={handleIncrementGenerations}
+              onUnlockPremium={() => {
+                triggerNotification("Redirecting: trial generation balance exhausted.");
+                scrollToSection("pricing");
+              }}
+            />
+          </div>
+        </section>
+
+        {/* SECTION 2.3 — THE CREATOR LIFECYCLE: SHOOT, EDIT, POST */}
+        <section id="editor-timeline" className="pb-28 bg-transparent relative z-10 overflow-hidden">
+          <div className="max-w-7xl mx-auto px-6 relative z-10">
+            
+            {/* 3-Column Lifecycle Cards - Images Only with Staggered Scroll Entrances */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+              
+              {/* Step 1: Shooting */}
+              <motion.div 
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="bg-white/80 backdrop-blur-md p-3 rounded-[32px] border border-slate-200/60 shadow-lg group hover:shadow-xl hover:border-purple-200/80 transition-all duration-300"
+              >
+                <div className="relative rounded-2xl overflow-hidden aspect-[4/3] bg-slate-100 border border-slate-150">
+                  <img 
+                    src="/src/assets/images/content_shooting_production_1782831737698.jpg" 
+                    alt="Professional Content Shooting Production Setup" 
+                    className="w-full h-full object-cover group-hover:scale-[1.04] transition-all duration-500"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+              </motion.div>
+
+              {/* Step 2: Editing */}
+              <motion.div 
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                className="bg-white/80 backdrop-blur-md p-3 rounded-[32px] border border-slate-200/60 shadow-lg group hover:shadow-xl hover:border-purple-200/80 transition-all duration-300"
+              >
+                <div className="relative rounded-2xl overflow-hidden aspect-[4/3] bg-slate-100 border border-slate-150">
+                  <img 
+                    src="/src/assets/images/creator_workspace_editing_1782831313900.jpg" 
+                    alt="Creator Workspace Video Editing Software" 
+                    className="w-full h-full object-cover group-hover:scale-[1.04] transition-all duration-500"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+              </motion.div>
+
+              {/* Step 3: Posting */}
+              <motion.div 
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                className="bg-white/80 backdrop-blur-md p-3 rounded-[32px] border border-slate-200/60 shadow-lg group hover:shadow-xl hover:border-purple-200/80 transition-all duration-300"
+              >
+                <div className="relative rounded-2xl overflow-hidden aspect-[4/3] bg-slate-100 border border-slate-150">
+                  <img 
+                    src="/src/assets/images/content_posting_analytics_1782831753877.jpg" 
+                    alt="Posting Analytics Social Feed live view" 
+                    className="w-full h-full object-cover group-hover:scale-[1.04] transition-all duration-500"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+              </motion.div>
+
+            </div>
+          </div>
+        </section>
+
        {/* SECTION 2.5 — GIGANTIC STRATEGIC VISION & MISSION */}
-      <section id="vision-mission" className="py-24 bg-white text-slate-900 border-t border-b border-slate-100/60 relative overflow-hidden">
+      <section id="vision-mission" className="py-24 bg-white/20 backdrop-blur-md text-slate-900 border-t border-b border-slate-150/40 relative overflow-hidden">
         {/* Subtle glowing orbs of atmospheric elements */}
         <div className="absolute top-[20%] left-[5%] w-96 h-96 bg-purple-500/5 rounded-full blur-[140px] pointer-events-none" />
         <div className="absolute bottom-[20%] right-[5%] w-96 h-96 bg-pink-500/5 rounded-full blur-[140px] pointer-events-none" />
@@ -595,12 +754,12 @@ export default function App() {
           
           {/* Header */}
           <div className="max-w-3xl mx-auto mb-20">
-            <span className="text-xs font-mono font-bold uppercase tracking-[0.25em] text-pink-550 block mb-3">
+            <span className="text-xs font-mono font-bold uppercase tracking-[0.25em] text-black block mb-3">
               ✦ OUR SUPREME MANIFESTO
             </span>
             <h2 className="text-4xl sm:text-6xl md:text-7xl font-black text-slate-950 tracking-tight leading-none font-outfit">
               Unlimited Vision. <br />
-              <span className="text-gradient font-black">Infinite Expression.</span>
+              <span className="text-black font-black">Infinite Expression.</span>
             </h2>
           </div>
 
@@ -622,13 +781,13 @@ export default function App() {
                   <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600">
                     <Eye className="w-4.5 h-4.5 animate-pulse" />
                   </div>
-                  <span className="text-xs font-mono font-black text-purple-600 uppercase tracking-widest block">
+                  <span className="text-xs font-mono font-black text-black uppercase tracking-widest block">
                     THE VISION
                   </span>
                 </div>
                 
                 {/* Huge Display Quote */}
-                <h3 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight select-text font-fraunces italic font-normal text-purple-950">
+                <h3 className="text-3xl sm:text-4xl font-extrabold text-black tracking-tight leading-tight select-text font-fraunces italic font-normal">
                   "A world where every great idea finds its audience."
                 </h3>
                 
@@ -659,13 +818,13 @@ export default function App() {
                   <div className="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center text-pink-500">
                     <Rocket className="w-4.5 h-4.5" />
                   </div>
-                  <span className="text-xs font-mono font-black text-pink-500 uppercase tracking-widest block">
+                  <span className="text-xs font-mono font-black text-black uppercase tracking-widest block">
                     THE MISSION
                   </span>
                 </div>
                 
                 {/* Huge Display Quote */}
-                <h3 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight leading-snug select-text font-outfit uppercase text-gradient">
+                <h3 className="text-xl sm:text-2xl font-bold text-black tracking-tight leading-snug select-text font-outfit uppercase">
                   Accelerating Strategic storytelling resonance at scale.
                 </h3>
                 
@@ -701,6 +860,8 @@ export default function App() {
 
       {/* FOOTER */}
       <FooterSection />
+
+      </div>
 
     </div>
   );
