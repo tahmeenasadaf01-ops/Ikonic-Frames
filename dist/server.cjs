@@ -24,6 +24,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 // server.ts
 var import_express = __toESM(require("express"), 1);
 var import_path = __toESM(require("path"), 1);
+var import_fs = __toESM(require("fs"), 1);
 var import_vite = require("vite");
 var import_genai = require("@google/genai");
 var import_dotenv = __toESM(require("dotenv"), 1);
@@ -31,6 +32,13 @@ import_dotenv.default.config();
 var app = (0, import_express.default)();
 var PORT = 3e3;
 app.use(import_express.default.json());
+app.get("/assets/*", (req, res, next) => {
+  const filePath = import_path.default.join(process.cwd(), req.path);
+  if (!import_fs.default.existsSync(filePath)) {
+    return res.status(404).send("Asset not found");
+  }
+  next();
+});
 var aiClient = null;
 function getGenAI() {
   if (!aiClient) {
